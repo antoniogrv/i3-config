@@ -13,6 +13,7 @@ Please consult the [i3wm user guide](https://i3wm.org/docs/userguide.html) for m
 - `feh`
 - `compton`
 - `i3blocks`
+- `i3layouts` and its dependencies
 - A [Nerd Font](https://www.nerdfonts.com/), such as [JetBrains Mono](https://www.programmingfonts.org/#jetbrainsmono)
 
 ## Workspaces
