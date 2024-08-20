@@ -11,10 +11,14 @@
 
 set $mod Mod4
 
-set $shell_class	"Gnome-terminal"
-set $font_family	"JetBrainsMono"
-set $font_style		"Light"
-set $font_size		12
+set $shell_class		"Gnome-terminal"
+set $shell				"gnome-terminal"
+set $font_family		"JetBrainsMono"
+set $font_style			"Light"
+set $font_size			12
+
+set $main_monitor		DP-4
+set $secondary_monitor	DP-2
 
 # Window colors
 set $w_focused_border_color			#44475A	
@@ -37,9 +41,11 @@ set $w_urgent_background_color		#19036e
 set $w_urgent_text_color			#bfc2c7
 set $w_urgent_indicator_color		#ffffff
 
-# Bar colors
+# Bar
+set $bar_position					top
+
 set $bar_background_color			#282A36
-set $bar_separator_color			#282A36
+set $bar_separator_color			#44475A	
 
 set $bar_focused_border				#44475A
 set $bar_focused_background			#44475A
@@ -58,6 +64,7 @@ for_window [all] title_format "  <span size='small'>%title</span>"
 
 # Window gaps & borders
 for_window [all] border normal 0
+for_window [class="firefox"] border none
 gaps inner 5px
 gaps outer 10px
 
@@ -238,7 +245,27 @@ bindsym $mod+r mode "resize"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-	status_command i3status
+	output $secondary_monitor
+	position $bar_position
+	tray_output none
+	colors {
+		background	$bar_background_color
+		separator	$bar_separator_color
+		
+		focused_workspace	$bar_focused_border		$bar_focused_background		$bar_focused_text
+		active_workspace	$bar_inactive_border	$bar_inactive_background	$bar_inactive_text
+		inactive_workspace	$bar_inactive_border	$bar_inactive_background	$bar_inactive_text
+		urgent_workspace	$bar_urgent_border		$bar_urgent_background		$bar_urgent_text
+	}
+}
+
+bar {
+	output $main_monitor
+	# top right bottom left
+	padding 0px 15px 0px 0px
+	status_command i3blocks -c ~/.config/i3/i3blocks.conf
+	position $bar_position
+	tray_output primary
 	colors {
 		background	$bar_background_color
 		separator	$bar_separator_color
@@ -263,25 +290,25 @@ bar {
 
 # Multi-monitor setup
 # Warning! This is *specific* to my configuration.
-exec_always --no-startup-id xrandr --output DP-2 --auto --left-of DP-4
+exec_always --no-startup-id xrandr --output $secondary_monitor --auto --left-of $main_monitor
 
 # Custom keybinds
-bindsym $mod+shift+x exec i3lock
+bindsym $mod+shift+x exec i3lock --color "$w_focused_background_color"
 bindsym $mod+shift+f exec firefox
 
 # Default applications assignments
 # To setup the following, you *need* to know the applications window class.
 # Use the "xprop" utility for this matter. Use the *second value* declared in WM_CLASS.
 # Please note that the 'assign' statements DOES NOT execute software on startup. It just tells *where* to put *eventually* executed software.
-assign [class=$shell_class] $ws1
-assign [class="firefox"] $ws2 
 
-# Default startup applications
-# The --no-startup-id prevents the boring loading cursor from spawning.
-exec --no-startup-id firefox
+# Doing the following prevents terminals from spawning in different workspaces. This is not what you want.
+#assign [class=$shell_class] $ws1
+assign [class="firefox"] $ws2 
 
 # Wallpaper setup
 exec_always --no-startup-id feh --bg-scale ~/.config/i3/raw/wallpaper.png
+exec_always --no-startup-id compton
+exec --no-startup-id i3-layouts
 
 # Window colors
 # Note: the "indicator" tells where the next pane will open (vertically, horizontally)
@@ -292,3 +319,12 @@ client.urgent			$w_urgent_border_color		$w_urgent_background_color		$w_urgent_te
 
 # The following disables the indicators
 hide_edge_borders both
+
+# Autosplitter
+set $i3l autosplit to workspace $ws1
+set $i3l autosplit to workspace $ws2
+
+# Default startup applications
+# The --no-startup-id prevents the boring loading cursor from spawning.
+exec --no-startup-id firefox
+exec --no-startup-id i3-msg 'workspace $ws1; exec $shell; exec $shell; exec $shell'
