@@ -2,6 +2,8 @@
 
 Please note that `MOD` is usually `WIN` or `ALT`.
 
+## Core
+
 `MOD + Enter` - Opens a new window.
 `MOD + Arrow Keys` - Moves focus to a different window, following the direction. The mode is indifferent. 
 `MOD + Shift + Enter` - Closes the current window.
@@ -14,3 +16,11 @@ Please note that `MOD` is usually `WIN` or `ALT`.
 `MOD + r` - Enters *resize mode*. You can resize the current window by using the *Arrow Keys* **without the MOD leader**.
 `MOD + v` - Next window will spawn vertically, i.e. *below*.
 `MOD + h` - Next window will spawn horizontally, i.e. *on the side*. This is the default behaviour.
+`MOD + Shift + r` - Reloads `i3wm` configuration files and applies changes.
+`MOD + Shift + e` - Logs out.
+
+## Custom
+
+`MOD + Shift + x` - Locks the screen. Input the user password to unlock.
+`MOD + Shift + f` - Opens Firefox.
+`FN + F1/F2/F3` - Control sound. Requires `pactl` installed installed.

@@ -11,13 +11,64 @@
 
 set $mod Mod4
 
+set $shell_class	"Gnome-terminal"
+set $font_family	"JetBrainsMono"
+set $font_style		"Light"
+set $font_size		12
+
+# Window colors
+set $w_focused_border_color			#44475A	
+set $w_focused_background_color		#44475A
+set $w_focused_text_color			#bfc2c7
+set $w_focused_indicator_color		#ffffff
+
+set $w_unfocused_border_color	    #232327	
+set $w_unfocused_background_color	#232327	
+set $w_unfocused_text_color			#4c586b
+set $w_unfocused_indicator_color	#ffffff
+
+set $w_inactive_border_color		#232327	
+set $w_inactive_background_color	#232327
+set $w_inactive_text_color			#4c586b
+set $w_inactive_indicator_color		#ffffff
+
+set $w_urgent_border_color			#19036e
+set $w_urgent_background_color		#19036e
+set $w_urgent_text_color			#bfc2c7
+set $w_urgent_indicator_color		#ffffff
+
+# Bar colors
+set $bar_background_color			#282A36
+set $bar_separator_color			#282A36
+
+set $bar_focused_border				#44475A
+set $bar_focused_background			#44475A
+set $bar_focused_text				#ffffff
+
+set $bar_inactive_border			#282A36
+set $bar_inactive_background		#282A36
+set $bar_inactive_text				#6f7378
+
+set $bar_urgent_border				#172769
+set $bar_urgent_background			#172769
+set $bar_urgent_text				#b3a119
+
+# Window title configuration
+for_window [all] title_format "  <span size='small'>%title</span>"
+
+# Window gaps & borders
+for_window [all] border normal 0
+gaps inner 5px
+gaps outer 10px
+
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
 font pango:monospace 8
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
-#font pango:DejaVu Sans Mono 8
+# Custom font
+font pango:$font_family $font_style $font_size
 
 # Start XDG autostart .desktop files using dex. See also
 # https://wiki.archlinux.org/index.php/XDG_Autostart
@@ -114,8 +165,9 @@ bindsym $mod+a focus parent
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
-set $ws1 "1"
-set $ws2 "2"
+# For icons, use a Nerd Font and look up the icons here: https://www.nerdfonts.com/cheat-sheet
+set $ws1 " 1  "
+set $ws2 " 2  "
 set $ws3 "3"
 set $ws4 "4"
 set $ws5 "5"
@@ -158,27 +210,27 @@ bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcu
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
-        # These bindings trigger as soon as you enter the resize mode
+# These bindings trigger as soon as you enter the resize mode
 
-        # Pressing left will shrink the window’s width.
-        # Pressing right will grow the window’s width.
-        # Pressing up will shrink the window’s height.
-        # Pressing down will grow the window’s height.
-        bindsym j resize shrink width 10 px or 10 ppt
-        bindsym k resize grow height 10 px or 10 ppt
-        bindsym l resize shrink height 10 px or 10 ppt
-        bindsym ograve resize grow width 10 px or 10 ppt
+# Pressing left will shrink the window’s width.
+# Pressing right will grow the window’s width.
+# Pressing up will shrink the window’s height.
+# Pressing down will grow the window’s height.
+	bindsym j resize shrink width 10 px or 10 ppt
+		bindsym k resize grow height 10 px or 10 ppt
+		bindsym l resize shrink height 10 px or 10 ppt
+		bindsym ograve resize grow width 10 px or 10 ppt
 
-        # same bindings, but for the arrow keys
-        bindsym Left resize shrink width 10 px or 10 ppt
-        bindsym Down resize grow height 10 px or 10 ppt
-        bindsym Up resize shrink height 10 px or 10 ppt
-        bindsym Right resize grow width 10 px or 10 ppt
+# same bindings, but for the arrow keys
+		bindsym Left resize shrink width 10 px or 10 ppt
+		bindsym Down resize grow height 10 px or 10 ppt
+		bindsym Up resize shrink height 10 px or 10 ppt
+		bindsym Right resize grow width 10 px or 10 ppt
 
-        # back to normal: Enter or Escape or $mod+r
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-        bindsym $mod+r mode "default"
+# back to normal: Enter or Escape or $mod+r
+		bindsym Return mode "default"
+		bindsym Escape mode "default"
+		bindsym $mod+r mode "default"
 }
 
 bindsym $mod+r mode "resize"
@@ -186,5 +238,57 @@ bindsym $mod+r mode "resize"
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-        status_command i3status
+	status_command i3status
+	colors {
+		background	$bar_background_color
+		separator	$bar_separator_color
+		
+		focused_workspace	$bar_focused_border		$bar_focused_background		$bar_focused_text
+		active_workspace	$bar_inactive_border	$bar_inactive_background	$bar_inactive_text
+		inactive_workspace	$bar_inactive_border	$bar_inactive_background	$bar_inactive_text
+		urgent_workspace	$bar_urgent_border		$bar_urgent_background		$bar_urgent_text
+	}
 }
+
+# The following should be uncomment and properly set up when on a laptop.
+# They require "playerctl" to be installed as a Debian package.
+# Please have a look at this forum post for more information: https://faq.i3wm.org/question/3747/enabling-multimedia-keys/?answer=3759#post-id-3759
+
+## Sreen brightness controls
+#bindsym XF86MonBrightnessUp exec xbacklight -inc 20 # increase screen brightness
+#bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightness
+#
+## Touchpad controls
+#bindsym XF86TouchpadToggle exec /some/path/toggletouchpad.sh # toggle touchpad
+
+# Multi-monitor setup
+# Warning! This is *specific* to my configuration.
+exec_always --no-startup-id xrandr --output DP-2 --auto --left-of DP-4
+
+# Custom keybinds
+bindsym $mod+shift+x exec i3lock
+bindsym $mod+shift+f exec firefox
+
+# Default applications assignments
+# To setup the following, you *need* to know the applications window class.
+# Use the "xprop" utility for this matter. Use the *second value* declared in WM_CLASS.
+# Please note that the 'assign' statements DOES NOT execute software on startup. It just tells *where* to put *eventually* executed software.
+assign [class=$shell_class] $ws1
+assign [class="firefox"] $ws2 
+
+# Default startup applications
+# The --no-startup-id prevents the boring loading cursor from spawning.
+exec --no-startup-id firefox
+
+# Wallpaper setup
+exec_always --no-startup-id feh --bg-scale ~/.config/i3/raw/wallpaper.png
+
+# Window colors
+# Note: the "indicator" tells where the next pane will open (vertically, horizontally)
+client.focused			$w_focused_border_color		$w_focused_background_color		$w_focused_text_color	$w_focused_indicator_color
+client.unfocused		$w_unfocused_border_color	$w_unfocused_background_color	$w_unfocused_text_color	$w_unfocused_indicator_color
+client.focused_inactive $w_inactive_border_color	$w_inactive_background_color	$w_inactive_text_color	$w_inactive_indicator_color
+client.urgent			$w_urgent_border_color		$w_urgent_background_color		$w_urgent_text_color	$w_urgentindicator_color
+
+# The following disables the indicators
+hide_edge_borders both
